@@ -1,5 +1,11 @@
--add local renown
+Notes:
+-run the python script locally with 'python server.py' in a terminal
+
+
+TODOs
 -add location
 -fix up occupations.json
 -tie occupations to regions
+-add factions to occupations
 -fix up names.json
+-get this running live on bobzimmerman.info (shouldn't need python)

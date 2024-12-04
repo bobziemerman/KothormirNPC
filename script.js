@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    let speciesData, pronounsData, namesData, religiousnessData, patronsData, occupationsData, renownData, reputationData;
+
     // Fetch all the data files
     Promise.all([
         fetch('data/species.json').then(response => response.json()),
@@ -6,21 +8,52 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('data/names.json').then(response => response.json()),
         fetch('data/religiousness.json').then(response => response.json()),
         fetch('data/patrons.json').then(response => response.json()),
-        fetch('data/occupations.json').then(response => response.json())
+        fetch('data/occupations.json').then(response => response.json()),
+        fetch('data/renown.json').then(response => response.json()),
+        fetch('data/reputation.json').then(response => response.json())
     ])
-    .then(([speciesData, pronounsData, namesData, religiousnessData, patronsData, occupationsData]) => {
+    .then(([species, pronouns, names, religiousness, patrons, occupations, renown, reputation]) => {
+        // Assign data to variables
+        speciesData = species;
+        pronounsData = pronouns;
+        namesData = names;
+        religiousnessData = religiousness;
+        patronsData = patrons;
+        occupationsData = occupations;
+        renownData = renown;
+        reputationData = reputation;
+
+        // Populate dropdowns with JSON data
+        populateSpeciesDropdown('species-dropdown', speciesData);
+        populatePronounsDropdown('pronouns-dropdown', pronounsData.default);
+        populateDropdown('religiousness-dropdown', Object.keys(religiousnessData));
+        populateDropdown('patron-dropdown', Object.keys(patronsData));
+        populateOccupationDropdown('occupation-dropdown', occupationsData.occupations);
+        populateDropdown('renown-dropdown', renownData.renown.map(item => item.value));
+
+        // Generate NPC initially
+        generateNPC();
+
+        // Add event listener for the randomize button
+        document.getElementById('randomize-button').addEventListener('click', generateNPC);
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
+
+    function generateNPC() {
         // Select a random species using weighted selection
         const randomSpecies = weightedRandomSelection(speciesData);
 
         // Set the species on the page
-        document.getElementById('npc-species').innerText = `${randomSpecies}`;
+        document.getElementById('npc-species').innerText = randomSpecies;
 
         // Determine pronouns based on species with weighted selection
         const pronounsOptions = pronounsData[`species-${randomSpecies}`] || pronounsData["default"];
         const randomPronoun = weightedRandomSelection(pronounsOptions);
 
         // Set the pronouns on the page
-        document.getElementById('npc-pronouns').innerText = `${randomPronoun}`;
+        document.getElementById('npc-pronouns').innerText = randomPronoun;
 
         // Determine name based on species and pronouns
         const speciesNames = namesData[`species-${randomSpecies}`] || namesData["default"];
@@ -30,14 +63,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const randomName = nameOptions[Math.floor(Math.random() * nameOptions.length)];
 
         // Set the name on the page
-        document.getElementById('npc-name').innerText = `${randomName}`;
+        document.getElementById('npc-name').innerText = randomName;
 
         // Determine religiousness using weighted selection
         const religiousnessOptions = Object.entries(religiousnessData).map(([key, value]) => ({ value: key, weight: value.weight }));
         const randomReligiousness = weightedRandomSelection(religiousnessOptions);
 
         // Set the religiousness on the page
-        document.getElementById('npc-religiousness').innerText = `${randomReligiousness}`;
+        document.getElementById('npc-religiousness').innerText = randomReligiousness;
 
         // Determine patron based on religiousness
         let patronText = "N/A";
@@ -59,13 +92,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Set the patron on the page
-        document.getElementById('npc-patron').innerText = `${patronText}`;
+        document.getElementById('npc-patron').innerText = patronText;
 
         // Generate a random age with a bell curve peak around 30
         const randomAge = generateBellCurveAge(16, 100, 30, 10);
 
         // Set the age on the page
-        document.getElementById('npc-age').innerText = `${randomAge}`;
+        document.getElementById('npc-age').innerText = randomAge;
 
         // Determine occupation using weighted selection
         const occupationOptions = occupationsData.occupations;
@@ -80,11 +113,68 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Set the occupation on the page
-        document.getElementById('npc-occupation').innerText = `${occupationText}`;
-    })
-    .catch(error => {
-        console.error('Error fetching data:', error);
-    });
+        document.getElementById('npc-occupation').innerText = occupationText;
+
+        // Determine reputation using weighted selection
+        const reputationOptions = reputationData.reputation;
+        const randomReputation = weightedRandomSelection(reputationOptions);
+
+        // Determine local and wider renown
+        const renownOptions = renownData.renown;
+        const randomLocalRenown = weightedRandomSelection(renownOptions);
+
+        // Filter the renown options for wider selection
+        const widerRenownOptions = renownOptions.slice(0, renownOptions.findIndex(option => option.value === randomLocalRenown) + 1);
+        const randomWiderRenown = weightedRandomSelection(widerRenownOptions);
+
+        // Set the renown on the page with reputation prefix
+        const renownText = `${randomReputation} - ${randomLocalRenown} (local), ${randomWiderRenown} (wider)`;
+        document.getElementById('npc-renown').innerText = renownText;
+    }
+
+    // Function to populate species dropdown
+    function populateSpeciesDropdown(elementId, speciesData) {
+        const dropdown = document.getElementById(elementId);
+        speciesData.forEach(species => {
+            const opt = document.createElement('option');
+            opt.value = species.value;
+            opt.textContent = species.value;
+            dropdown.appendChild(opt);
+        });
+    }
+
+    // Function to populate pronouns dropdown
+    function populatePronounsDropdown(elementId, pronounsData) {
+        const dropdown = document.getElementById(elementId);
+        pronounsData.forEach(pronoun => {
+            const opt = document.createElement('option');
+            opt.value = pronoun.value;
+            opt.textContent = pronoun.value;
+            dropdown.appendChild(opt);
+        });
+    }
+
+    // Function to populate occupation dropdown
+    function populateOccupationDropdown(elementId, occupationsData) {
+        const dropdown = document.getElementById(elementId);
+        occupationsData.forEach(occupation => {
+            const opt = document.createElement('option');
+            opt.value = occupation.value;
+            opt.textContent = occupation.value;
+            dropdown.appendChild(opt);
+        });
+    }
+
+    // Function to populate general dropdowns with simple string options
+    function populateDropdown(elementId, options) {
+        const dropdown = document.getElementById(elementId);
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.textContent = option;
+            dropdown.appendChild(opt);
+        });
+    }
 
     // Function to make a weighted random selection
     function weightedRandomSelection(items) {

@@ -1,0 +1,9 @@
+{
+    "reputation": [
+        { "value": "Notorious", "weight": 5 },
+        { "value": "Unpopular", "weight": 10 },
+        { "value": "Undecided", "weight": 50 },
+        { "value": "Popular", "weight": 30 },
+        { "value": "Revered", "weight": 5 }
+    ]
+}
