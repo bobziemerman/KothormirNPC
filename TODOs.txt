@@ -3,7 +3,7 @@ Notes:
 
 
 TODOs
--add location
+-fix up locations.json
 -fix up occupations.json
 -tie occupations to regions
 -add factions to occupations

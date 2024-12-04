@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NPC Generator</title>
     
-    <script src="script.js" defer></script>
+    <script src="npc_generator_main.js" defer></script>
+    <script src="npc_generator_function.js" defer></script>
     <style>
+        select {
+            width: 100px;
+        }
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -42,6 +46,12 @@
         </select>
         <div class="attribute">Pronouns</div>
         <div class="value" id="npc-pronouns"></div>
+        
+        <select id="location-dropdown">
+            <option value="Random">Random</option>
+        </select>
+        <div class="attribute">Location</div>
+        <div class="value" id="npc-location"></div>
         
         <div></div>
         <div class="attribute">Age</div>

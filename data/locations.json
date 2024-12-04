@@ -1,0 +1,28 @@
+{
+    "locations": [
+        {
+            "value": "Mountain Village",
+            "weight": 1,
+            "secondary": [
+                { "value": "North Peak", "weight": 50 },
+                { "value": "South Slope", "weight": 50 }
+            ]
+        },
+        {
+            "value": "Coastal Town",
+            "weight": 1,
+            "secondary": [
+                { "value": "East Dock", "weight": 50 },
+                { "value": "West Shore", "weight": 50 }
+            ]
+        },
+        {
+            "value": "Forest Settlement",
+            "weight": 1,
+            "secondary": [
+                { "value": "Deep Grove", "weight": 50 },
+                { "value": "Edge Clearing", "weight": 50 }
+            ]
+        }
+    ]
+}
