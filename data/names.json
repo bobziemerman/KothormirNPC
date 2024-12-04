@@ -1,0 +1,17 @@
+{
+    "default": {
+        "He/him": ["Aldric", "Finnian", "Galen"],
+        "He/they": ["Soren", "Ashwin", "Cyril"],
+        "They/them": ["Dara", "Elowen", "Ryn"],
+        "She/they": ["Kaia", "Rowan", "Avery"],
+        "She/her": ["Bryn", "Elara", "Lyra"]
+    },
+    "species-Puddlefolk": {
+        "They/them": ["Ripple", "Pondle", "Drift"]
+    },
+    "species-Arbran": {
+        "He/him": ["Oakheart", "Leafblade"],
+        "She/her": ["Ivyshade", "Willowbranch"],
+        "They/them": ["Forestchild", "Greensong"]
+    }
+}

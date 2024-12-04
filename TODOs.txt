@@ -1,0 +1,5 @@
+-add local renown
+-add location
+-fix up occupations.json
+-tie occupations to regions
+-fix up names.json

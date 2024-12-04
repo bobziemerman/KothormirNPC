@@ -1,0 +1,9 @@
+{
+    "Hostile": { "weight": 5 },
+    "Opposed": { "weight": 10 },
+    "Skeptical": { "weight": 15 },
+    "Indifferent": { "weight": 25 },
+    "Curious": { "weight": 30 },
+    "Devoted": { "weight": 10 },
+    "Zealous": { "weight": 5 }
+}

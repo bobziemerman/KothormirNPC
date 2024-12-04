@@ -1,0 +1,33 @@
+{
+    "occupations": [
+        { "value": "Farmer", "weight": 10 },
+        { "value": "Blacksmith", "weight": 8 },
+        { "value": "Merchant", "weight": 8 },
+        { "value": "Soldier", "weight": 7 },
+        { "value": "Hunter", "weight": 7 },
+        { "value": "Baker", "weight": 6 },
+        { "value": "Healer", "weight": 5 },
+        { "value": "Fisher", "weight": 5 },
+        { "value": "Tailor", "weight": 5 },
+        { "value": "Guard", "weight": 6 },
+        { "value": "Carpenter", "weight": 6 },
+        { "value": "Miner", "weight": 5 },
+        { "value": "Scribe", "weight": 4 },
+        { "value": "Bard", "weight": 4 },
+        { "value": "Herbalist", "weight": 4 },
+        { "value": "Innkeeper", "weight": 4 },
+        { "value": "Clergy", "weight": 6, "secondary": [
+            { "value": "Priest", "weight": 50 },
+            { "value": "Monk", "weight": 30 },
+            { "value": "Oracle", "weight": 20 }
+        ] },
+        { "value": "Mage", "weight": 3 },
+        { "value": "Alchemist", "weight": 3 },
+        { "value": "Noble", "weight": 2 },
+        { "value": "Ranger", "weight": 4 },
+        { "value": "Thief", "weight": 3 },
+        { "value": "Cook", "weight": 5 },
+        { "value": "Druid", "weight": 3 },
+        { "value": "Shipwright", "weight": 2 }
+    ]
+}

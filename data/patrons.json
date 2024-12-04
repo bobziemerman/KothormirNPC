@@ -1,0 +1,64 @@
+{
+    "Atheist": {
+        "weight": 5,
+        "secondary": [
+            { "value": "No god", "weight": 60 },
+            { "value": "Scales of Drakul (secret)", "weight": 30 },
+            { "value": "Scales of Drakul (open)", "weight": 10 }
+        ]
+    },
+    "Behemoth": {
+        "weight": 20,
+        "secondary": [
+            { "value": "Ancestor", "weight": 50 },
+            { "value": "UNUSUAL: Amphithere", "weight": 1 },
+            { "value": "UNUSUAL: Basilisk", "weight": 1 },
+            { "value": "UNUSUAL: Carapax", "weight": 1 },
+            { "value": "UNUSUAL: Cyrrax", "weight": 1 },
+            { "value": "UNUSUAL: Dragon Turtle", "weight": 1 },
+            { "value": "UNUSUAL: Elemental Drake", "weight": 1 },
+            { "value": "UNUSUAL: Gem Wyrm", "weight": 1 },
+            { "value": "UNUSUAL: Hydra", "weight": 1 },
+            { "value": "UNUSUAL: Leviathan", "weight": 1 },
+            { "value": "UNUSUAL: Metallic Wyvern", "weight": 1 },
+            { "value": "UNUSUAL: Niloct", "weight": 1 },
+            { "value": "UNUSUAL: Rhacodalct", "weight": 1 },
+            { "value": "UNUSUAL: Salivore", "weight": 1 },
+            { "value": "UNUSUAL: Thundridon", "weight": 1 },
+            { "value": "UNUSUAL: Tyracalypsis", "weight": 1 }
+        ]
+    },
+    "Dragon": {
+        "weight": 40,
+        "secondary": [
+            { "value": "Aavo", "weight": 1 },
+            { "value": "Cirryn", "weight": 1 },
+            { "value": "Demmyn", "weight": 1 },
+            { "value": "Fyviss", "weight": 1 },
+            { "value": "Grraxwyl", "weight": 1 },
+            { "value": "Nierys", "weight": 1 },
+            { "value": "Ovvira", "weight": 1 },
+            { "value": "Shorrel", "weight": 1 },
+            { "value": "Viirnag", "weight": 1 },
+            { "value": "Voarliollth", "weight": 1 },
+            { "value": "Xivvyn", "weight": 1 }
+        ]
+    },
+    "Sun": {
+        "weight": 30,
+        "secondary": [
+            { "value": "Harcos", "weight": 50 },
+            { "value": "Cazadora", "weight": 50 }
+        ]
+    },
+    "Fae": {
+        "weight": 5,
+        "secondary": [
+            { "value": "The Eternal Radiant", "weight": 30 },
+            { "value": "The Frabjous Radiant", "weight": 30 },
+            { "value": "The Summer Radiant", "weight": 30 },
+            { "value": "The Dreamwalker", "weight": 5 },
+            { "value": "Other Fae", "weight": 5 }
+        ]
+    }
+}

@@ -5,22 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NPC Generator</title>
     
-    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="script.js" defer></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .npc-container {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 10px;
+        }
+        .attribute {
+            font-weight: bold;
+        }
+        .value {
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
-    <h1 id="npc-species"></h1>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('data/species.json')
-                .then(response => response.json())
-                .then(species => {
-                    const randomSpecies = species[Math.floor(Math.random() * species.length)];
-                    document.getElementById('npc-species').innerText = `NPC Species: ${randomSpecies}`;
-                })
-                .catch(error => {
-                    console.error('Error fetching species:', error);
-                });
-        });
-    </script>
+    <div class="npc-container">
+        <div class="attribute">Species</div>
+        <div class="value" id="npc-species"></div>
+        
+        <div class="attribute">Pronouns</div>
+        <div class="value" id="npc-pronouns"></div>
+        
+        <div class="attribute">Name</div>
+        <div class="value" id="npc-name"></div>
+        
+        <div class="attribute">Religiousness</div>
+        <div class="value" id="npc-religiousness"></div>
+        
+        <div class="attribute">Patron</div>
+        <div class="value" id="npc-patron"></div>
+        
+        <div class="attribute">Age</div>
+        <div class="value" id="npc-age"></div>
+        
+        <div class="attribute">Occupation</div>
+        <div class="value" id="npc-occupation"></div>
+    </div>
 </body>
 </html>
