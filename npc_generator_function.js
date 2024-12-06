@@ -1,111 +1,111 @@
 // npc_generator_function.js
 
+// Function to randomly generate values for different attributes
 function generateNPC() {
-    // Get selected options
-    const selectedLocation = document.getElementById('location-dropdown').value;
-    const selectedSpecies = document.getElementById('species-dropdown').value;
-    const selectedPronouns = document.getElementById('pronouns-dropdown').value;
-    const selectedReligiousness = document.getElementById('religiousness-dropdown').value;
-    const selectedPatron = document.getElementById('patron-dropdown').value;
-    const selectedOccupation = document.getElementById('occupation-dropdown').value;
-    const selectedRenown = document.getElementById('renown-dropdown').value;
-
-    // Select a location, either randomly or from dropdown
-    const location = selectedLocation === 'Random' ? weightedRandomSelection(window.locationsData.locations) : selectedLocation;
-    let locationText = location;
-    const locationDataItem = window.locationsData.locations.find(loc => loc.value === location);
-    if (locationDataItem && locationDataItem.secondary) {
-        const randomSecondaryLocation = weightedRandomSelection(locationDataItem.secondary);
-        locationText = `${location} - ${randomSecondaryLocation}`;
+    if (!window.npcLocationData || !window.speciesData || !window.pronounsData || !window.occupationsData || !window.renownData || !window.religiousnessData || !window.patronsData) {
+        console.error('Data not loaded yet. Cannot generate NPC.');
+        return;
     }
-    document.getElementById('npc-location').innerText = locationText;
-
-    // Select a species, either randomly or from dropdown
-    const species = selectedSpecies === 'Random' ? weightedRandomSelection(window.speciesData) : selectedSpecies;
-    document.getElementById('npc-species').innerText = species;
-
-    // Determine pronouns, either randomly or from dropdown
-    const pronounsOptions = window.pronounsData[`species-${species}`] || window.pronounsData['default'];
-    const pronouns = selectedPronouns === 'Random' ? weightedRandomSelection(pronounsOptions) : selectedPronouns;
-    document.getElementById('npc-pronouns').innerText = pronouns;
-
-    // Determine name based on species and pronouns
-    const speciesNames = window.namesData[`species-${species}`] || window.namesData['default'];
-    const nameOptions = speciesNames[pronouns] || [];
-    const randomName = nameOptions[Math.floor(Math.random() * nameOptions.length)];
-    document.getElementById('npc-name').innerText = randomName;
-
-    // Determine religiousness, either randomly or from dropdown
-    const religiousness = selectedReligiousness === 'Random' ? weightedRandomSelection(Object.entries(window.religiousnessData).map(([key, value]) => ({ value: key, weight: value.weight }))) : selectedReligiousness;
-    document.getElementById('npc-religiousness').innerText = religiousness;
-
-    // Determine patron, either randomly or from dropdown
-    let patronText = 'N/A';
-    if (religiousness !== 'Indifferent') {
-        if (selectedPatron === 'Random') {
-            let patronOptions;
-            if (religiousness === 'Hostile' || religiousness === 'Opposed' || religiousness === 'Skeptical') {
-                patronOptions = [{ value: 'Atheist', weight: window.patronsData['Atheist'].weight }];
-            } else {
-                patronOptions = Object.entries(window.patronsData).filter(([key]) => key !== 'Atheist').map(([key, value]) => ({ value: key, weight: value.weight }));
-            }
-            const randomPatron = weightedRandomSelection(patronOptions);
-            const secondaryOptions = window.patronsData[randomPatron].secondary;
-            const randomSecondary = weightedRandomSelection(secondaryOptions);
-            patronText = `${randomPatron} - ${randomSecondary}`;
-        } else {
-            const secondaryOptions = window.patronsData[selectedPatron].secondary;
-            const randomSecondary = weightedRandomSelection(secondaryOptions);
-            patronText = `${selectedPatron} - ${randomSecondary}`;
-        }
-    }
-    document.getElementById('npc-patron').innerText = patronText;
-
-    // Generate a random age with a bell curve peak around 30
-    const randomAge = generateBellCurveAge(16, 100, 30, 10);
-    document.getElementById('npc-age').innerText = randomAge;
-
-    // Determine occupation, either randomly or from dropdown
-    const occupation = selectedOccupation === 'Random' ? weightedRandomSelection(window.occupationsData.occupations) : selectedOccupation;
-    let occupationText = occupation;
-    if (occupation === 'Clergy') {
-        const secondaryOccupationOptions = window.occupationsData.occupations.find(occ => occ.value === 'Clergy').secondary;
-        const randomSecondaryOccupation = weightedRandomSelection(secondaryOccupationOptions);
-        occupationText = `${occupation} - ${randomSecondaryOccupation}`;
-    }
-    document.getElementById('npc-occupation').innerText = occupationText;
-
-    // Determine reputation using weighted selection
-    const reputationOptions = window.reputationData.reputation;
-    const randomReputation = weightedRandomSelection(reputationOptions);
-
-    // Determine renown, either randomly or from dropdown
-    const localRenown = selectedRenown === 'Random' ? weightedRandomSelection(window.renownData.renown) : selectedRenown;
-    const widerRenownOptions = window.renownData.renown.slice(0, window.renownData.renown.findIndex(option => option.value === localRenown) + 1);
-    const widerRenown = weightedRandomSelection(widerRenownOptions);
-    const renownText = `${randomReputation} - ${localRenown} (local), ${widerRenown} (wider)`;
-    document.getElementById('npc-renown').innerText = renownText;
+    window.npcLocation = fetchRandomValue(window.npcLocationData.locations.map(item => item.value));
+    window.species = fetchRandomValue(window.speciesData.map(item => item.value));
+    window.pronouns = fetchRandomValue(window.pronounsData.default.map(item => item.value));
+    window.age = Math.floor(16 + Math.pow(Math.random(), 2) * 84); // Bell curve around 30
+    window.occupation = fetchRandomValue(window.occupationsData.occupations.map(item => item.value));
+    window.renown = fetchRandomRenown();
+    window.religiousness = fetchRandomValue(Object.keys(window.religiousnessData));
+    window.patron = fetchRandomPatron();
 }
 
-// Function to make a weighted random selection
-function weightedRandomSelection(items) {
-    const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
-    let randomNum = Math.random() * totalWeight;
-    for (let i = 0; i < items.length; i++) {
-        if (randomNum < items[i].weight) {
-            return items[i].value;
-        }
-        randomNum -= items[i].weight;
+// Function to regenerate a single value without modifying other attributes
+function regenerateValue(attribute) {
+    if (!window.npcLocationData || !window.speciesData || !window.pronounsData || !window.occupationsData || !window.renownData || !window.religiousnessData || !window.patronsData) {
+        console.error('Data not loaded yet. Cannot regenerate value.');
+        return;
+    }
+    switch (attribute) {
+        case 'npc-location':
+            window.npcLocation = fetchRandomValue(window.npcLocationData.locations.map(item => item.value));
+            document.getElementById('npc-location').textContent = window.npcLocation;
+            break;
+        case 'npc-species':
+            window.species = fetchRandomValue(window.speciesData.map(item => item.value));
+            document.getElementById('npc-species').textContent = window.species;
+            break;
+        case 'npc-pronouns':
+            window.pronouns = fetchRandomValue(window.pronounsData.default.map(item => item.value));
+            document.getElementById('npc-pronouns').textContent = window.pronouns;
+            break;
+        case 'npc-age':
+            window.age = Math.floor(16 + Math.pow(Math.random(), 2) * 84); // Bell curve around 30
+            document.getElementById('npc-age').textContent = window.age;
+            break;
+        case 'npc-occupation':
+            window.occupation = fetchRandomValue(window.occupationsData.occupations.map(item => item.value));
+            document.getElementById('npc-occupation').textContent = window.occupation;
+            break;
+        case 'npc-renown':
+            window.renown = fetchRandomRenown();
+            document.getElementById('npc-renown').textContent = `${window.renown.local} (local), ${window.renown.wider} (wider)`;
+            break;
+        case 'npc-religiousness':
+            window.religiousness = fetchRandomValue(Object.keys(window.religiousnessData));
+            document.getElementById('npc-religiousness').textContent = window.religiousness;
+            break;
+        case 'npc-patron':
+            window.patron = fetchRandomPatron();
+            document.getElementById('npc-patron').textContent = `${window.patron.primary} - ${window.patron.secondary}`;
+            break;
     }
 }
 
-// Function to generate a random age with a bell curve around a given mean
-function generateBellCurveAge(min, max, mean, deviation) {
-    let u = 0, v = 0;
-    while (u === 0) u = Math.random(); // Converting [0,1) to (0,1)
-    while (v === 0) v = Math.random();
-    let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
-    num = num * deviation + mean;
-    num = Math.round(num);
-    return Math.min(Math.max(num, min), max);
+// Helper function to fetch a random value from an array
+function fetchRandomValue(array) {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
 }
+
+// Function to fetch random renown
+function fetchRandomRenown() {
+    const localRenownIndex = Math.floor(Math.random() * window.renownData.renown.length);
+    const localRenown = window.renownData.renown[localRenownIndex].value;
+    const widerRenownIndex = Math.floor(Math.random() * (localRenownIndex + 1)); // Cannot be higher than local
+    const widerRenown = window.renownData.renown[widerRenownIndex].value;
+    return { local: localRenown, wider: widerRenown };
+}
+
+// Function to fetch random patron based on religiousness level
+function fetchRandomPatron() {
+    let primary;
+    if (window.religiousness === 'Hostile' || window.religiousness === 'Opposed' || window.religiousness === 'Skeptical') {
+        primary = 'Atheist';
+    } else {
+        primary = fetchRandomValue(Object.keys(window.patronsData));
+    }
+    const secondaryList = window.patronsData[primary];
+    const secondary = secondaryList.secondary ? fetchRandomValue(secondaryList.secondary).value : 'None';
+    return { primary, secondary };
+}
+
+// Function to initialize and display NPC data
+function displayNPC() {
+    document.getElementById('npc-location').textContent = window.npcLocation;
+    document.getElementById('npc-species').textContent = window.species;
+    document.getElementById('npc-pronouns').textContent = window.pronouns;
+    document.getElementById('npc-age').textContent = window.age;
+    document.getElementById('npc-occupation').textContent = window.occupation;
+    document.getElementById('npc-renown').textContent = `${window.renown.local} (local), ${window.renown.wider} (wider)`;
+    document.getElementById('npc-religiousness').textContent = window.religiousness;
+    document.getElementById('npc-patron').textContent = `${window.patron.primary} - ${window.patron.secondary}`;
+}
+
+// Event listener for the randomize button
+document.getElementById('randomize-button').addEventListener('click', function () {
+    generateNPC();
+    displayNPC();
+});
+
+// Wait for all data to be loaded before generating and displaying NPC data
+document.addEventListener('dataLoaded', () => {
+    generateNPC();
+    displayNPC();
+});

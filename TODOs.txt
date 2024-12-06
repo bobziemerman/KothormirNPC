@@ -10,5 +10,4 @@ TODOs
 -fix up occupations.json
 -tie occupations to regions
 -add factions to occupations
--fix up names.json
 -get this running live on bobzimmerman.info (shouldn't need python)

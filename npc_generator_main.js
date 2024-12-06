@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ])
     .then(([locations, species, pronouns, names, religiousness, patrons, occupations, renown, reputation]) => {
         // Assign data to variables
-        window.locationsData = locations;
+        window.npcLocationData = locations;
         window.speciesData = species;
         window.pronounsData = pronouns;
         window.namesData = names;
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.reputationData = reputation;
 
         // Populate dropdowns with JSON data
-        populateDropdown('location-dropdown', window.locationsData.locations.map(item => item.value));
+        populateDropdown('location-dropdown', window.npcLocationData.locations.map(item => item.value));
         populateDropdown('species-dropdown', window.speciesData.map(item => item.value));
         populateDropdown('pronouns-dropdown', window.pronounsData.default.map(item => item.value));
         populateDropdown('religiousness-dropdown', Object.keys(window.religiousnessData));
@@ -34,11 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
         populateDropdown('occupation-dropdown', window.occupationsData.occupations.map(item => item.value));
         populateDropdown('renown-dropdown', window.renownData.renown.map(item => item.value));
 
-        // Generate NPC initially
-        generateNPC();
-
-        // Add event listener for the randomize button
-        document.getElementById('randomize-button').addEventListener('click', generateNPC);
+        // Dispatch the dataLoaded event after data is fully loaded
+        document.dispatchEvent(new Event('dataLoaded'));
     })
     .catch(error => {
         console.error('Error fetching data:', error);
