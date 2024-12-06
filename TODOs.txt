@@ -3,6 +3,9 @@ Notes:
 
 
 TODOs
+-reroll buttons for each field that randomize only that field, taking into account the other existing constraints
+-azhdar stick to sun patrons
+-hatchless are more likely (guaranteed?) to be atheist
 -fix up locations.json
 -fix up occupations.json
 -tie occupations to regions
