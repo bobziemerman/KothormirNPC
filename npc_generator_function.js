@@ -6,13 +6,13 @@ function generateNPC() {
         console.error('Data not loaded yet. Cannot generate NPC.');
         return;
     }
-    window.npcLocation = fetchRandomValue(window.npcLocationData.locations.map(item => item.value));
-    window.species = fetchRandomValue(window.speciesData.map(item => item.value));
-    window.pronouns = fetchRandomValue(window.pronounsData.default.map(item => item.value));
-    window.age = Math.floor(16 + Math.pow(Math.random(), 2) * 84); // Bell curve around 30
-    window.occupation = fetchRandomValue(window.occupationsData.occupations.map(item => item.value));
+    window.npcLocation = getLockedOrRandomValue('location-dropdown', window.npcLocationData.locations.map(item => item.value));
+    window.species = getLockedOrRandomValue('species-dropdown', window.speciesData.map(item => item.value));
+    window.pronouns = getLockedOrRandomValue('pronouns-dropdown', window.pronounsData.default.map(item => item.value));
+    window.age = getLockedOrRandomAge();
+    window.occupation = getLockedOrRandomValue('occupation-dropdown', window.occupationsData.occupations.map(item => item.value));
     window.renown = fetchRandomRenown();
-    window.religiousness = fetchRandomValue(Object.keys(window.religiousnessData));
+    window.religiousness = getLockedOrRandomValue('religiousness-dropdown', Object.keys(window.religiousnessData));
     window.patron = fetchRandomPatron();
 }
 
@@ -30,6 +30,8 @@ function regenerateValue(attribute) {
         case 'npc-species':
             window.species = fetchRandomValue(window.speciesData.map(item => item.value));
             document.getElementById('npc-species').textContent = window.species;
+            window.patron = fetchRandomPatron(); // Update patron based on species change
+            document.getElementById('npc-patron').textContent = `${window.patron.primary} - ${window.patron.secondary}`;
             break;
         case 'npc-pronouns':
             window.pronouns = fetchRandomValue(window.pronounsData.default.map(item => item.value));
@@ -50,6 +52,8 @@ function regenerateValue(attribute) {
         case 'npc-religiousness':
             window.religiousness = fetchRandomValue(Object.keys(window.religiousnessData));
             document.getElementById('npc-religiousness').textContent = window.religiousness;
+            window.patron = fetchRandomPatron(); // Update patron based on religiousness change
+            document.getElementById('npc-patron').textContent = `${window.patron.primary} - ${window.patron.secondary}`;
             break;
         case 'npc-patron':
             window.patron = fetchRandomPatron();
@@ -64,6 +68,20 @@ function fetchRandomValue(array) {
     return array[randomIndex];
 }
 
+// Helper function to get a locked value from a dropdown or generate a random value
+function getLockedOrRandomValue(dropdownId, options) {
+    const dropdown = document.getElementById(dropdownId);
+    const selectedValue = dropdown.value;
+    return selectedValue === 'Random' ? fetchRandomValue(options) : selectedValue;
+}
+
+// Helper function to get a locked age value or generate a random age
+function getLockedOrRandomAge() {
+    const ageDropdown = document.getElementById('age-dropdown');
+    const selectedValue = ageDropdown ? ageDropdown.value : 'Random';
+    return selectedValue === 'Random' ? Math.floor(16 + Math.pow(Math.random(), 2) * 84) : parseInt(selectedValue, 10);
+}
+
 // Function to fetch random renown
 function fetchRandomRenown() {
     const localRenownIndex = Math.floor(Math.random() * window.renownData.renown.length);
@@ -76,7 +94,11 @@ function fetchRandomRenown() {
 // Function to fetch random patron based on religiousness level
 function fetchRandomPatron() {
     let primary;
-    if (window.religiousness === 'Hostile' || window.religiousness === 'Opposed' || window.religiousness === 'Skeptical') {
+    if (window.species === 'Azhdar') {
+        primary = Math.random() < 0.8 ? 'Sun' : 'Atheist';
+    } else if (window.species === 'Hatchless') {
+        primary = Math.random() < 0.8 ? 'Atheist' : fetchRandomValue(Object.keys(window.patronsData));
+    } else if (window.religiousness === 'Hostile' || window.religiousness === 'Opposed' || window.religiousness === 'Skeptical') {
         primary = 'Atheist';
     } else {
         primary = fetchRandomValue(Object.keys(window.patronsData));
