@@ -28,11 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Populate dropdowns with JSON data
         populateDropdown('npc-location-dropdown', window.npcLocationData.locations.map(item => item.value));
         populateDropdown('species-dropdown', window.speciesData.map(item => item.value));
-        populateDropdown('pronouns-dropdown', window.pronounsData.default.map(item => item.value));
+        populateDropdown('pronouns-dropdown', window.pronounsData.map(item => item.value));
         populateDropdown('religiousness-dropdown', Object.keys(window.religiousnessData));
         populateDropdown('patron-dropdown', Object.keys(window.patronsData));
         populateDropdown('occupation-dropdown', window.occupationsData.occupations.map(item => item.value));
-        populateDropdown('renown-dropdown', window.renownData.renown.map(item => item.value));
+        populateDropdown('renown-dropdown', window.renownData.map(item => item.value));
 
         // Dispatch the dataLoaded event after data is fully loaded
         document.dispatchEvent(new Event('dataLoaded'));

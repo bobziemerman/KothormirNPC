@@ -1,11 +1,9 @@
-{
-    "renown": [
-        { "value": "Unknown", "weight": 10 },
-        { "value": "Obscure", "weight": 15 },
-        { "value": "Familiar", "weight": 20 },
-        { "value": "Notable", "weight": 20 },
-        { "value": "Recognized", "weight": 15 },
-        { "value": "Prominent", "weight": 10 },
-        { "value": "Famous", "weight": 10 }
-    ]
-}
+[
+    { "value": "Unknown", "weight": 10 },
+    { "value": "Obscure", "weight": 15 },
+    { "value": "Familiar", "weight": 20 },
+    { "value": "Notable", "weight": 20 },
+    { "value": "Recognized", "weight": 15 },
+    { "value": "Prominent", "weight": 10 },
+    { "value": "Famous", "weight": 10 }
+]

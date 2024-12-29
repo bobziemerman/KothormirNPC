@@ -1,12 +1,7 @@
-{
-    "default": [
-        { "value": "He/him", "weight": 40 },
-        { "value": "He/they", "weight": 5 },
-        { "value": "They/them", "weight": 10 },
-        { "value": "She/they", "weight": 5 },
-        { "value": "She/her", "weight": 40 }
-    ],
-    "species-Puddlefolk": [
-        { "value": "They/them", "weight": 100 }
-    ]
-}
+[
+    { "value": "He/him", "weight": 40 },
+    { "value": "He/they", "weight": 5 },
+    { "value": "They/them", "weight": 10 },
+    { "value": "She/they", "weight": 5 },
+    { "value": "She/her", "weight": 40 }
+]

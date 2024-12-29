@@ -7,15 +7,15 @@ function generateNPC() {
         return;
     }
 
-    getLockedOrRandomValue('npc-location');
-    getLockedOrRandomValue('species');
-    getLockedOrRandomValue('name'); // dependent on species
-    getLockedOrRandomValue('pronouns');
-    getLockedOrRandomValue('age');
-    getLockedOrRandomValue('occupation');
-    getLockedOrRandomValue('renown');
-    getLockedOrRandomValue('religiousness');
-    getLockedOrRandomValue('patron'); // dependent on species and religiousness
+    setLockedOrRandomValue('npc-location');
+    setLockedOrRandomValue('species');
+    setLockedOrRandomValue('pronouns'); // dependent on species
+    setLockedOrRandomValue('age');
+    setLockedOrRandomValue('occupation');
+    setLockedOrRandomValue('renown');
+    setLockedOrRandomValue('religiousness');
+    setLockedOrRandomValue('patron'); // dependent on species and religiousness
+    setLockedOrRandomValue('name'); // dependent on species, age, and pronouns
 }
 
 function setField(field, value) {
@@ -35,14 +35,12 @@ function regenerateValue(attribute) {
             break;
         case 'species':
             setField('species', getRandomValue(window.speciesData));
-            getLockedOrRandomValue('patron');
-            getLockedOrRandomValue('name');
             break;
         case 'pronouns':
-            setField('pronouns', getRandomValue(window.pronounsData.default));
+            setField('pronouns', getRandomPronouns());
             break;
         case 'age':
-            setField('age', Math.floor(16 + Math.pow(Math.random(), 2) * 84)); // Bell curve around 30
+            setField('age', getRandomAge());
             break;
         case 'occupation':
             setField('occupation', getRandomValue(window.occupationsData.occupations));
@@ -53,11 +51,10 @@ function regenerateValue(attribute) {
             break;
         case 'religiousness':
             setField('religiousness', getRandomValue(Object.keys(window.religiousnessData)));
-            getLockedOrRandomValue('patron');
             break;
         case 'patron':
             const patron = getRandomPatron();
-            setField('patron', `${window.patron.primary} - ${window.patron.secondary}`);
+            setField('patron', `${patron.primary} - ${patron.secondary}`);
             break;
         case 'name':
             setField('name', getRandomName());
@@ -66,7 +63,7 @@ function regenerateValue(attribute) {
 }
 
 // Helper function to get a locked value from a dropdown or generate a random value
-function getLockedOrRandomValue(field) {
+function setLockedOrRandomValue(field) {
     const dropdown = document.getElementById(field + '-dropdown');
     const selectedValue = dropdown?.value ?? 'Random';
     if(selectedValue === 'Random') {
@@ -74,7 +71,6 @@ function getLockedOrRandomValue(field) {
     } else {
         setField(field, selectedValue);
     }
-    return selectedValue === 'Random' ? regenerateValue(field) : selectedValue;
 }
 
 // Helper function to get a random value from an array
@@ -90,24 +86,99 @@ function getRandomValue(array) {
         }
         return array[index].value;
     } else {
-        const randomIndex = Math.floor(Math.random() * array.length);
-        return array[randomIndex];
+        return array[Math.floor(Math.random() * array.length)];
     }
 }
 
-// Helper function to get a random name based on species
+// Helper functions to get a random name based on species
+function getRandomThreeGenderName(speciesNames, pronouns){
+    const male = speciesNames['He/him'];
+    const female = speciesNames['She/her'];
+    const enby = speciesNames['They/them'];
+    let names = [];
+    if (pronouns.includes('He')) {
+        names = names.concat(male);
+    }
+    if (pronouns.includes('She')) {
+        names = names.concat(female);
+    }
+    if (pronouns.includes('They') || pronouns.includes('they')) {
+        names = names.concat(enby);
+    }
+    return names[Math.floor(Math.random() * names.length)];
+}
 function getRandomName() {
-    return Math.floor(16 + Math.pow(Math.random(), 2) * 84);
+    const species = window.species;
+    const pronouns = window.pronouns;
+    const allNames = window.namesData;
+    const speciesNames = allNames[species];
+
+    if (species === 'Condrak' || species === 'Puddlefolk') {
+        return speciesNames[Math.floor(Math.random() * speciesNames.length)];
+    } else if (species === 'Scinomorph') {
+        const syllables = Math.floor(Number(window.age) / 15 );
+        let name = '';
+        for(let i=0; i <= syllables; i++) {
+            name += speciesNames[Math.floor(Math.random() * speciesNames.length)];
+        }
+        return name;
+    } else if (species === "Arbran" || species === "Wanderer") {
+        return getRandomThreeGenderName(speciesNames, pronouns) + ' '+ speciesNames['lastName'][Math.floor(Math.random() * speciesNames['lastName'].length)];
+    } else if (species === "Ziphodont") {
+        return getRandomThreeGenderName(speciesNames, pronouns) + ' ' + speciesNames['middleName'][Math.floor(Math.random() * speciesNames['middleName'].length)] + ' '+ speciesNames['lastName'][Math.floor(Math.random() * speciesNames['lastName'].length)];
+    }
+
+    return getRandomThreeGenderName(speciesNames, pronouns);
 }
 
-// Helper function to get a random age
+// Helper function to get a random age (min 16, peak at 30, longer taper towards 100)
 function getRandomAge() {
-    return Math.floor(16 + Math.pow(Math.random(), 2) * 84);
+    function generateRandomFromWeights(weights) {
+        const cdf = [];
+        let cumulativeSum = 0;
+        weights.forEach(item => {
+            cumulativeSum += item.weight;
+            cdf.push({ age: item.age, cumulative: cumulativeSum });
+        });
+    
+        const random = Math.random();
+        for (let i = 0; i < cdf.length; i++) {
+            if (random <= cdf[i].cumulative) {
+                return cdf[i].age;
+            }
+        }
+    
+        // Fallback (should not occur if weights are normalized properly)
+        return cdf[cdf.length - 1].age;
+    }
+    
+    function asymmetricCurve(x, peak = 30, k1 = 5, k2 = 25) {
+        if (x < peak) {
+            return Math.exp(-(peak - x) / k1);
+        } else {
+            return Math.exp(-(x - peak) / k2);
+        }
+    }
+    
+    // Example: Generate weights for ages between 16 and 100
+    const weights = [];
+    for (let age = 16; age <= 100; age++) {
+        weights.push({ age, weight: asymmetricCurve(age) });
+    }
+    
+    // Normalize the weights to sum to 1
+    function normalizeWeights(weights) {
+        const totalWeight = weights.reduce((sum, item) => sum + item.weight, 0);
+        return weights.map(item => ({ ...item, weight: item.weight / totalWeight }));
+    }
+    const normalizedWeights = normalizeWeights(weights);
+    
+    return generateRandomFromWeights(normalizedWeights);
 }
 
 // Function to get random renown
 function getRandomRenown() {
-    const renown = window.renownData.renown; // TODO get rid of the unnecessary 'renown' sub-field?
+    const renown = window.renownData;
     const total = renown.reduce((count, e) => count + Number(e.weight), 0);
 
     // Local renown
@@ -131,9 +202,18 @@ function getRandomRenown() {
         widerRenownIndex ++;
     }
 
-    const localRenown = window.renownData.renown[localRenownIndex].value;
-    const widerRenown = window.renownData.renown[widerRenownIndex].value;
+    const localRenown = window.renownData[localRenownIndex].value;
+    const widerRenown = window.renownData[widerRenownIndex].value;
     return { local: localRenown, wider: widerRenown };
+}
+
+// Helper function to get random pronouns
+function getRandomPronouns() {
+    if (window.species === "Puddlefolk") {
+        return "They/them";
+    } else {
+        return getRandomValue(window.pronounsData);
+    }
 }
 
 // Function to get random patron based on religiousness level
@@ -181,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
             // Update the corresponding display field
             document.getElementById(valueFieldId).textContent = selectedValue === 'Random'
-                ? getLockedOrRandomValue(valueFieldId) : selectedValue;
+                ? setLockedOrRandomValue(valueFieldId) : selectedValue;
         })
     });
 });
