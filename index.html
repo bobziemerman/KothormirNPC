@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NPC Generator</title>
+    <title>Kothormir NPC Generator</title>
     
     <script src="npc_generator_main.js" defer></script>
     <script src="npc_generator_function.js" defer></script>
@@ -40,7 +40,12 @@
 </head>
 <body>
     <div class="npc-container">
-        <select id="location-dropdown">
+        <div></div>
+        <button class="icon-button" onclick="regenerateValue('name')">🔄</button>
+        <div class="attribute">Name</div>
+        <div class="value" id="name"></div>
+
+        <select id="npc-location-dropdown">
             <option value="Random">Random</option>
         </select>
         <button class="icon-button" onclick="regenerateValue('npc-location')">🔄</button>
@@ -50,49 +55,49 @@
         <select id="species-dropdown">
             <option value="Random">Random</option>
         </select>
-        <button class="icon-button" onclick="regenerateValue('npc-species')">🔄</button>
+        <button class="icon-button" onclick="regenerateValue('species')">🔄</button>
         <div class="attribute">Species</div>
-        <div class="value" id="npc-species"></div>
+        <div class="value" id="species"></div>
         
         <select id="pronouns-dropdown">
             <option value="Random">Random</option>
         </select>
-        <button class="icon-button" onclick="regenerateValue('npc-pronouns')">🔄</button>
+        <button class="icon-button" onclick="regenerateValue('pronouns')">🔄</button>
         <div class="attribute">Pronouns</div>
-        <div class="value" id="npc-pronouns"></div>
+        <div class="value" id="pronouns"></div>
         
         <div></div>
-        <button class="icon-button" onclick="regenerateValue('npc-age')">🔄</button>
+        <button class="icon-button" onclick="regenerateValue('age')">🔄</button>
         <div class="attribute">Age</div>
-        <div class="value" id="npc-age"></div>
+        <div class="value" id="age"></div>
         
         <select id="occupation-dropdown">
             <option value="Random">Random</option>
         </select>
-        <button class="icon-button" onclick="regenerateValue('npc-occupation')">🔄</button>
+        <button class="icon-button" onclick="regenerateValue('occupation')">🔄</button>
         <div class="attribute">Occupation</div>
-        <div class="value" id="npc-occupation"></div>
+        <div class="value" id="occupation"></div>
         
         <select id="renown-dropdown">
             <option value="Random">Random</option>
         </select>
-        <button class="icon-button" onclick="regenerateValue('npc-renown')">🔄</button>
+        <button class="icon-button" onclick="regenerateValue('renown')">🔄</button>
         <div class="attribute">Renown</div>
-        <div class="value" id="npc-renown"></div>
+        <div class="value" id="renown"></div>
         
         <select id="religiousness-dropdown">
             <option value="Random">Random</option>
         </select>
-        <button class="icon-button" onclick="regenerateValue('npc-religiousness')">🔄</button>
+        <button class="icon-button" onclick="regenerateValue('religiousness')">🔄</button>
         <div class="attribute">Religiousness</div>
-        <div class="value" id="npc-religiousness"></div>
+        <div class="value" id="religiousness"></div>
         
         <select id="patron-dropdown">
             <option value="Random">Random</option>
         </select>
-        <button class="icon-button" onclick="regenerateValue('npc-patron')">🔄</button>
+        <button class="icon-button" onclick="regenerateValue('patron')">🔄</button>
         <div class="attribute">Patron</div>
-        <div class="value" id="npc-patron"></div>
+        <div class="value" id="patron"></div>
     </div>
     <button id="randomize-button">Randomize NPC</button>
 </body>

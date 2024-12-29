@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.reputationData = reputation;
 
         // Populate dropdowns with JSON data
-        populateDropdown('location-dropdown', window.npcLocationData.locations.map(item => item.value));
+        populateDropdown('npc-location-dropdown', window.npcLocationData.locations.map(item => item.value));
         populateDropdown('species-dropdown', window.speciesData.map(item => item.value));
         populateDropdown('pronouns-dropdown', window.pronounsData.default.map(item => item.value));
         populateDropdown('religiousness-dropdown', Object.keys(window.religiousnessData));
