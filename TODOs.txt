@@ -1,7 +1,5 @@
--Add last names for Celtics in the form of O'*
 -fix alignments for labels/buttons
 -fix up locations.json
 -fix up occupations.json
 -tie occupations to regions
 -add factions to occupations
--get this running live on bobzimmerman.info (shouldn't need python)

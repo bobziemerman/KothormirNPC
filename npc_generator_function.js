@@ -122,7 +122,7 @@ function getRandomName() {
             name += speciesNames[Math.floor(Math.random() * speciesNames.length)];
         }
         return name;
-    } else if (species === "Arbran" || species === "Wanderer") {
+    } else if (species === "Arbran" || species === "Osteant" || species === "Wanderer") {
         return getRandomThreeGenderName(speciesNames, pronouns) + ' '+ speciesNames['lastName'][Math.floor(Math.random() * speciesNames['lastName'].length)];
     } else if (species === "Ziphodont") {
         return getRandomThreeGenderName(speciesNames, pronouns) + ' ' + speciesNames['middleName'][Math.floor(Math.random() * speciesNames['middleName'].length)] + ' '+ speciesNames['lastName'][Math.floor(Math.random() * speciesNames['lastName'].length)];
