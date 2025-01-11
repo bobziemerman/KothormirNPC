@@ -1,4 +1,3 @@
--fix alignments for labels/buttons
 -fix up locations.json
 -fix up occupations.json
 -tie occupations to regions
