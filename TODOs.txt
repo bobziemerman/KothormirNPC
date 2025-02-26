@@ -1,3 +1,5 @@
+-split ice names out in names.json (or flag them?) so they can be used in conjunction with the rimedrake last names
+    -split out all drakeling names by type (in the list, flag them each as different species)
 -fix up locations.json
 -fix up occupations.json
 -tie occupations to regions
